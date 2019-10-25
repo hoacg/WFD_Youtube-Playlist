@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {SearchService} from '../search.service';
 
 @Component({
   selector: 'app-playlist',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./playlist.component.scss']
 })
 export class PlaylistComponent implements OnInit {
+
+  filterPlaylist: any[];
 
   playlist = [
     {id: 'CX11yw6YL1w', song: 'Céline Dion - Ashes (from the Deadpool 2 Motion Picture Soundtrack)'},
@@ -15,9 +18,17 @@ export class PlaylistComponent implements OnInit {
     {id: 'WpYeekQkAdc', song: 'The Black Eyed Peas - Where Is The Love?'}
   ];
 
-  constructor() { }
+  constructor(private searchService: SearchService) { }
 
   ngOnInit() {
+
+    // all songs
+    this.filterPlaylist = this.playlist;
+
+    // when search text is emitted
+    this.searchService.listen().subscribe(searchText => {
+      this.filterPlaylist = this.playlist.filter(video => video.song.includes(searchText));
+    });
   }
 
 }
